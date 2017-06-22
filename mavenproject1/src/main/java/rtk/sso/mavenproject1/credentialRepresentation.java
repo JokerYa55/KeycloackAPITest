@@ -5,6 +5,7 @@
  */
 package rtk.sso.mavenproject1;
 
+import java.util.HashMap;
 import javax.ws.rs.core.MultivaluedHashMap;
 
 /**
@@ -12,8 +13,9 @@ import javax.ws.rs.core.MultivaluedHashMap;
  * @author vasil
  */
 public class credentialRepresentation {
+
     private String algorithm;
-    private MultivaluedHashMap config;
+    private HashMap config = new HashMap();
     private int counter;
     private long createdDate;
     private String device;
@@ -24,7 +26,7 @@ public class credentialRepresentation {
     private String salt;
     private boolean temporary;
     private String type;
-    private String value;        
+    private String value;
 
     public String getAlgorithm() {
         return algorithm;
@@ -32,14 +34,6 @@ public class credentialRepresentation {
 
     public void setAlgorithm(String algorithm) {
         this.algorithm = algorithm;
-    }
-
-    public MultivaluedHashMap getConfig() {
-        return config;
-    }
-
-    public void setConfig(MultivaluedHashMap config) {
-        this.config = config;
     }
 
     public int getCounter() {
@@ -128,5 +122,13 @@ public class credentialRepresentation {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public HashMap getConfig() {
+        return config;
+    }
+
+    public void setConfig(HashMap config) {
+        this.config = config;
     }
 }
