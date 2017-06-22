@@ -6,7 +6,7 @@
         <artifactId>mainProject</artifactId>
         <version>1</version>
     </parent>
-    <artifactId>mavenproject1</artifactId>
+    <artifactId>keycloakApiTest</artifactId>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>

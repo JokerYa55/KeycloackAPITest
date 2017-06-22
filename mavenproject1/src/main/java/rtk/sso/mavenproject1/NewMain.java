@@ -54,11 +54,11 @@ public class NewMain {
         //System.out.println(access_token);
 
         keycloakUser user = new keycloakUser();
-        user.email = "111@mail.ru";
-        user.enabled = true;
-        user.firstName = "test11";
-        user.lastName = "test11";
-        user.username = "test112";
+        user.setEmail("111@mail.ru");
+        user.setEnabled(true);
+        user.setFirstName("test11");
+        user.setLastName("test11");
+        user.setUsername("test112");
 
         // Отправляем другой запрос
         url = "http://192.168.1.150:8080/auth/admin/realms/master/users";
