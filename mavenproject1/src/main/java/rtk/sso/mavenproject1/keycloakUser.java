@@ -5,22 +5,21 @@
  */
 package rtk.sso.mavenproject1;
 
+import java.util.List;
+
 /**
  *
  * @author vasil
- * {'username' : 'bburke', 'enabled': true, 'email' : ' 
-> > [hidden email]', 'firstName': 'Bill', 'lastName': 'Burke', 
-> > 'credentials' : [{ 'type' : 'password', 'value' : 'password' } ], 
-> > 'realmRoles': [ 'user', 'offline_access'  ], 'clientRoles': {'account': [ 
-> > 'manage-account' ] } }
+ *
  */
 public class keycloakUser {
+
     private String username;
     private boolean enabled;
     private String email;
     private String firstName;
     private String lastName;
-    private credentialRepresentation credentials;
+    private List<credentialRepresentation> credentials;
 
     public String getUsername() {
         return username;
@@ -62,12 +61,11 @@ public class keycloakUser {
         this.lastName = lastName;
     }
 
-    public credentialRepresentation getCredentials() {
+    public List<credentialRepresentation> getCredentials() {
         return credentials;
     }
 
-    public void setCredentials(credentialRepresentation credentials) {
+    public void setCredentials(List<credentialRepresentation> credentials) {
         this.credentials = credentials;
     }
-    
 }
