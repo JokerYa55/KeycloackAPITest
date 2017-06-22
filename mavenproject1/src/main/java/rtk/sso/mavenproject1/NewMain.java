@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,11 +55,20 @@ public class NewMain {
         //System.out.println(access_token);
 
         keycloakUser user = new keycloakUser();
-        user.setEmail("111@mail.ru");
+        user.setEmail("7777@mail.ru");
         user.setEnabled(true);
-        user.setFirstName("test11");
-        user.setLastName("test11");
-        user.setUsername("test112");
+        user.setFirstName("test777");
+        user.setLastName("test777");
+        user.setUsername("test777");
+        
+        credentialRepresentation credentials = new credentialRepresentation();
+        credentials.setType("password");
+        credentials.setValue("1234");
+        
+        List<credentialRepresentation> tempList = new ArrayList<>();
+        tempList.add(credentials);
+        
+        user.setCredentials(tempList);
 
         // Отправляем другой запрос
         url = "http://192.168.1.150:8080/auth/admin/realms/master/users";
