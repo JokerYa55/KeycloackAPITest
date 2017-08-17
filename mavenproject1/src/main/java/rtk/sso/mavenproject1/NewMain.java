@@ -9,13 +9,10 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -27,6 +24,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -42,6 +40,8 @@ public class NewMain {
      * @throws java.io.IOException
      * @throws org.json.simple.parser.ParseException
      */
+    private static final Logger log = Logger.getLogger(NewMain.class);
+
     public static void main(String[] args) throws IOException, ParseException {
 
         String url = "http://192.168.1.150:8080/auth/realms/master/protocol/openid-connect/token";
@@ -60,14 +60,14 @@ public class NewMain {
         user.setFirstName("test777");
         user.setLastName("test777");
         user.setUsername("test777");
-        
+
         credentialRepresentation credentials = new credentialRepresentation();
         credentials.setType("password");
         credentials.setValue("1234");
-        
+
         List<credentialRepresentation> tempList = new ArrayList<>();
         tempList.add(credentials);
-        
+
         user.setCredentials(tempList);
 
         // Отправляем другой запрос
@@ -177,12 +177,12 @@ public class NewMain {
                 System.out.println(line);
                 json.append(line);
             }
-            JSONParser parser = new JSONParser();
+            org.json.simple.parser.JSONParser parser = new JSONParser();
             Object obj = parser.parse(json.toString());
             JSONObject jsonObj = (JSONObject) obj;
             res = jsonObj;
         } catch (IOException ex) {
-            Logger.getLogger(NewMain.class.getName()).log(Level.SEVERE, null, ex);
+            log.info(ex.getMessage());
         }
         return res;
     }

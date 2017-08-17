@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>
+            <form action="http://192.168.1.150:8080/auth/realms/master/protocol/openid-connect/token" method="POST">
+                
+                <input type="text" name="client_id" value="admin-cli"/>
+                <input type="text" name="username" value="vasil"/>
+                <input type="text" name="password" value="123"/>
+                <input type="text" name="grant_type" value="password"/>
+                <input type="submit" name="send" value="Вход"/>
+            </form>
+        </div>
+    </body>
+</html>
