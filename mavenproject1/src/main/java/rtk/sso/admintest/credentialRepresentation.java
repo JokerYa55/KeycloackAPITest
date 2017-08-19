@@ -43,4 +43,11 @@ public class credentialRepresentation {
     public void setValue(String value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return "credentialRepresentation{" + "type=" + type + ", value=" + value + '}';
+    }
+    
+    
 }

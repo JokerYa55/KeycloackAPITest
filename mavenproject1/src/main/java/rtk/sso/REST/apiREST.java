@@ -13,6 +13,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import static rtk.sso.admintest.utlhttp.doGet;
 import static rtk.sso.admintest.utlhttp.doPost;
 
@@ -61,28 +62,41 @@ public class apiREST {
         return res;
     }
 
-    public void addUser(String token) {
+    public String addUser(Object user) {
+        String res = null;
         try {
-
+            // Отправляем другой запрос
+            String url = "http://" + host + "/auth/admin/realms/" + this.realm + "/users";
+            Map<String, String> mapHeader = new HashMap<>();
+            mapHeader.put("Content-Type", "application/json");
+            mapHeader.put("Authorization", "Bearer " + this.token);
+            JSONObject res1 = doPost(url, user, mapHeader);
+            System.out.println("res1 = " + res1.toJSONString());
+            res = (String) res1.get("error");
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+        return res;
     }
 
     public JSONArray getUsers() {
         System.out.println("getUsers");
         JSONArray res = null;
-        try {            
+        try {
             // /admin/realms/{realm}/users
             String url = "http://" + host + "/auth/admin/realms/" + this.realm + "/users";
             System.out.println("url = " + url);
             Map<String, String> mapHeader = new HashMap<>();
             mapHeader.put("Content-Type", "application/json");
             mapHeader.put("Authorization", "Bearer " + this.token);
-            doGet(url, mapHeader);
+            String arrStr = doGet(url, mapHeader);
+            JSONParser parser = new JSONParser();
+            Object obj = parser.parse(arrStr.toString());
+            res = (JSONArray) obj;
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+        System.out.println("res= " + res.toJSONString());
         return res;
     }
 }

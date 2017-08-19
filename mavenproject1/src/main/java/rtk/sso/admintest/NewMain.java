@@ -38,7 +38,7 @@ public class NewMain {
 //            System.out.println("item = " + item);
 //
 //        }
-        for (int i = 14342; i < 18000; i++) {
+        for (int i = 16500; i < 18000; i++) {
             keycloakUser user = new keycloakUser();
             user.setEmail("user_00" + i + "@mail.ru");
             user.setEnabled(true);
@@ -47,7 +47,7 @@ public class NewMain {
             user.setUsername("user_00" + i);
 
             String s1 = "г. Краснодар, пр. Чекистов 37, кв " + i;
-            String addr = new String(s1.getBytes("UTF-8"), "windows-1251");
+            String addr = new String(s1.getBytes("windows-1251"), "UTF-8");
             System.out.println("addr = " + addr);
             HashMap<String, String> attr = new HashMap<>();
             attr.put("elk_id", "100" + i);

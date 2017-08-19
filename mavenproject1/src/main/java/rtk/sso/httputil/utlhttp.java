@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.http.Header;
@@ -22,6 +23,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.log4j.Logger;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -35,6 +37,7 @@ public class utlhttp {
     private static final Logger log = Logger.getLogger(utlhttp.class);
 
     public static JSONObject doPost(String url, Object params, Map<String, String> headerList) {
+        System.out.println("doPost => " + params.toString());
         JSONObject res = new JSONObject();
         try {
             HttpClient httpClient = HttpClientBuilder.create().build();
@@ -42,8 +45,9 @@ public class utlhttp {
             JSONParser parser = new JSONParser();
             HttpPost post = new HttpPost(url);
             StringEntity postingString = new StringEntity(gson.toJson(params));
-            System.out.println("json = " + gson.toJson(params));
+            System.out.println("postingString = " + postingString.toString());
             post.setEntity(postingString);
+            
             if (headerList != null) {
                 headerList.entrySet().stream().forEach((t) -> {
                     Header header = new BasicHeader(t.getKey(), t.getValue());
@@ -56,16 +60,22 @@ public class utlhttp {
             String line = "";
             StringBuilder json = new StringBuilder();
             while ((line = rd.readLine()) != null) {
-                System.out.println(line);
                 json.append(line);
             }
 
-            Object obj = parser.parse(json.toString());
-            JSONObject jsonObj = (JSONObject) obj;
-            res = jsonObj;
-            System.out.println("access_token : " + res.get("access_token"));
+            System.out.println("json = " + json.toString());
 
-        } catch (IOException | IllegalStateException | ParseException e) {
+            if ((json != null) && (json.toString().equals("Bearer"))) {
+                JSONObject obj = new JSONObject();
+                obj.put("error", "Bearer");                
+                res = obj;
+            } else {
+                Object obj = parser.parse(json.toString());
+                JSONObject jsonObj = (JSONObject) obj;
+                res = jsonObj;
+            }
+
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return res;
@@ -87,6 +97,7 @@ public class utlhttp {
             }
 
             if (params != null) {
+                System.out.println((new UrlEncodedFormEntity(params)).toString());
                 post.setEntity(new UrlEncodedFormEntity(params));
             }
 
@@ -111,8 +122,16 @@ public class utlhttp {
         return res;
     }
 
-    public static JSONObject doGet(String url, Map<String, String> headerList) throws ParseException {
-        JSONObject res = new JSONObject();
+    /**
+     *
+     * @param url
+     * @param headerList
+     * @return
+     * @throws ParseException
+     */
+    public static String doGet(String url, Map<String, String> headerList) throws ParseException {
+        System.out.println("doGet");
+        String res = null;
         HttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(url);
         HttpResponse response;
@@ -130,14 +149,22 @@ public class utlhttp {
             String line = "";
             StringBuilder json = new StringBuilder();
             while ((line = rd.readLine()) != null) {
-                System.out.println(line);
                 json.append(line);
             }
-            org.json.simple.parser.JSONParser parser = new JSONParser();
+
+            System.out.println("json = " + json.toString());
+            res = json.toString();
+            /*org.json.simple.parser.JSONParser parser = new JSONParser();
             Object obj = parser.parse(json.toString());
-            JSONObject jsonObj = (JSONObject) obj;
-            res = jsonObj;
-        } catch (IOException ex) {
+            try {
+                JSONObject jsonObj = (JSONObject) obj;
+                res = jsonObj;
+            } catch (Exception e) {
+                JSONArray jsonArr = (JSONArray) obj;
+                System.out.println("arr = " + jsonArr.toJSONString() );
+            }
+            System.out.println("res = " + res.toJSONString());*/
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
         return res;

@@ -5,6 +5,7 @@
  */
 package rtk.sso.admintest;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -19,6 +20,7 @@ public class keycloakUser {
     private String email;
     private String firstName;
     private String lastName;
+    private HashMap<String, String> attributes;
     private List<credentialRepresentation> credentials;
 
     public String getUsername() {
@@ -68,4 +70,20 @@ public class keycloakUser {
     public void setCredentials(List<credentialRepresentation> credentials) {
         this.credentials = credentials;
     }
+
+   
+
+    @Override
+    public String toString() {
+        return "keycloakUser{" + "username=" + username + ", enabled=" + enabled + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", attributes=" + attributes + ", credentials=" + credentials + '}';
+    }
+
+    public HashMap<String, String> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(HashMap<String, String> attributes) {
+        this.attributes = attributes;
+    }
+
 }
