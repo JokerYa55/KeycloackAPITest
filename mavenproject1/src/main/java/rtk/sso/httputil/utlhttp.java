@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rtk.sso.admintest;
+package rtk.sso.httputil;
 
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.http.Header;
@@ -23,7 +22,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -36,7 +34,7 @@ public class utlhttp {
 
     private static final Logger log = Logger.getLogger(utlhttp.class);
 
-    public static JSONObject doPost(String url, Object params, Map<String, String> headerList) {
+    public JSONObject doPost(String url, Object params, Map<String, String> headerList) {
         System.out.println("doPost => " + params.toString());
         JSONObject res = new JSONObject();
         try {
@@ -44,13 +42,18 @@ public class utlhttp {
             Gson gson = new Gson();
             JSONParser parser = new JSONParser();
             HttpPost post = new HttpPost(url);
-            StringEntity postingString = new StringEntity(gson.toJson(params));
+            
+            System.out.println("json param = " + gson.toJson(params));
+            
+            StringEntity postingString = new StringEntity(gson.toJson(params), "application/json", "UTF-8");
+            System.out.println("params = " + params.toString());
             System.out.println("postingString = " + postingString.toString());
             post.setEntity(postingString);
             
             if (headerList != null) {
                 headerList.entrySet().stream().forEach((t) -> {
                     Header header = new BasicHeader(t.getKey(), t.getValue());
+                    System.out.println("header => " + header);
                     post.setHeader(header);
                 });
             }
@@ -84,7 +87,7 @@ public class utlhttp {
     /**
      * Отправка POST запроса
      */
-    public static JSONObject doPost(String url, List params, Map<String, String> headerList) {
+    public JSONObject doPost(String url, List params, Map<String, String> headerList) {
         JSONObject res = new JSONObject();
         try {
             HttpClient client = new DefaultHttpClient();
@@ -129,7 +132,7 @@ public class utlhttp {
      * @return
      * @throws ParseException
      */
-    public static String doGet(String url, Map<String, String> headerList) throws ParseException {
+    public String doGet(String url, Map<String, String> headerList) throws ParseException {
         System.out.println("doGet");
         String res = null;
         HttpClient client = new DefaultHttpClient();

@@ -6,6 +6,7 @@
 package rtk.sso.admintest;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,7 @@ public class NewMain {
 
     public static void main(String[] args) throws IOException, ParseException {
 
-        apiREST keycloak = new apiREST("vasil", "123", "192.168.1.150:8080", "videomanager");
+        apiREST keycloak = new apiREST("vasil", "123", "127.0.0.1:8080", "videomanager");
         keycloak.Init();
         JSONArray userList = keycloak.getUsers();
 
@@ -38,16 +39,16 @@ public class NewMain {
 //            System.out.println("item = " + item);
 //
 //        }
-        for (int i = 16500; i < 18000; i++) {
+        for (int i = 1; i < 5; i++) {
             keycloakUser user = new keycloakUser();
             user.setEmail("user_00" + i + "@mail.ru");
             user.setEnabled(true);
             user.setFirstName("user_00" + i);
             user.setLastName("user_00" + i);
             user.setUsername("user_00" + i);
-
-            String s1 = "Ð³. ÐšÑ€Ð°ÑÐ½Ð¾Ð´Ð°Ñ€, Ð¿Ñ€. Ð§ÐµÐºÐ¸ÑÑ‚Ð¾Ð² 37, ÐºÐ² " + i;
-            String addr = new String(s1.getBytes("windows-1251"), "UTF-8");
+            
+            String s1 =  "ïð. ×åêèñòîâ 37, êâ. " + i;
+            String addr = new String(s1.getBytes("ISO-8859-1"), "UTF-8");
             System.out.println("addr = " + addr);
             HashMap<String, String> attr = new HashMap<>();
             attr.put("elk_id", "100" + i);

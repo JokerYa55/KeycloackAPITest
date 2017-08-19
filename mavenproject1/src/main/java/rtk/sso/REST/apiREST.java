@@ -14,8 +14,7 @@ import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import static rtk.sso.admintest.utlhttp.doGet;
-import static rtk.sso.admintest.utlhttp.doPost;
+import rtk.sso.httputil.utlhttp;
 
 /**
  *
@@ -47,13 +46,14 @@ public class apiREST {
     private String getToken() {
         String res = null;
         try {
+            utlhttp httpUtil = new utlhttp();
             String url = "http://" + host + "/auth/realms/master/protocol/openid-connect/token";
             List nameValuePairs = new ArrayList(1);
             nameValuePairs.add(new BasicNameValuePair("client_id", "admin-cli")); //you can as many name value pair as you want in the list.
             nameValuePairs.add(new BasicNameValuePair("username", this.username));
             nameValuePairs.add(new BasicNameValuePair("password", this.password));
             nameValuePairs.add(new BasicNameValuePair("grant_type", "password"));
-            JSONObject accessJson = doPost(url, nameValuePairs, null);
+            JSONObject accessJson = httpUtil.doPost(url, nameValuePairs, null);
             res = (String) accessJson.get("access_token");
             log.info("access_token = " + res);
         } catch (Exception e) {
@@ -65,12 +65,13 @@ public class apiREST {
     public String addUser(Object user) {
         String res = null;
         try {
+            utlhttp httpUtil = new utlhttp();
             // Отправляем другой запрос
             String url = "http://" + host + "/auth/admin/realms/" + this.realm + "/users";
             Map<String, String> mapHeader = new HashMap<>();
             mapHeader.put("Content-Type", "application/json");
             mapHeader.put("Authorization", "Bearer " + this.token);
-            JSONObject res1 = doPost(url, user, mapHeader);
+            JSONObject res1 = httpUtil.doPost(url, user, mapHeader);
             System.out.println("res1 = " + res1.toJSONString());
             res = (String) res1.get("error");
         } catch (Exception e) {
@@ -83,13 +84,14 @@ public class apiREST {
         System.out.println("getUsers");
         JSONArray res = null;
         try {
+            utlhttp httpUtil = new utlhttp();
             // /admin/realms/{realm}/users
             String url = "http://" + host + "/auth/admin/realms/" + this.realm + "/users";
             System.out.println("url = " + url);
             Map<String, String> mapHeader = new HashMap<>();
             mapHeader.put("Content-Type", "application/json");
             mapHeader.put("Authorization", "Bearer " + this.token);
-            String arrStr = doGet(url, mapHeader);
+            String arrStr = httpUtil.doGet(url, mapHeader);
             JSONParser parser = new JSONParser();
             Object obj = parser.parse(arrStr.toString());
             res = (JSONArray) obj;
