@@ -31,7 +31,7 @@ import org.json.simple.parser.ParseException;
  * @author vasil
  */
 public class utlhttp {
-    
+
     private static final Logger log = Logger.getLogger(utlhttp.class);
 
     public static JSONObject doPost(String url, Object params, Map<String, String> headerList) {
@@ -74,7 +74,7 @@ public class utlhttp {
     /**
      * Отправка POST запроса
      */
-   public static JSONObject doPost(String url, List params, Map<String, String> headerList) {
+    public static JSONObject doPost(String url, List params, Map<String, String> headerList) {
         JSONObject res = new JSONObject();
         try {
             HttpClient client = new DefaultHttpClient();
@@ -138,7 +138,7 @@ public class utlhttp {
             JSONObject jsonObj = (JSONObject) obj;
             res = jsonObj;
         } catch (IOException ex) {
-            log.info(ex.getMessage());
+            System.out.println(ex.getMessage());
         }
         return res;
     }
