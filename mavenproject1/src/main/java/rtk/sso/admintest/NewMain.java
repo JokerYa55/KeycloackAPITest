@@ -6,7 +6,12 @@
 package rtk.sso.admintest;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import org.apache.log4j.Logger;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import rtk.sso.REST.apiREST;
 
@@ -27,30 +32,47 @@ public class NewMain {
 
         apiREST keycloak = new apiREST("vasil", "123", "192.168.1.150:8080", "videomanager");
         keycloak.Init();
-        keycloak.getUsers();
+        JSONArray userList = keycloak.getUsers();
 
-        /*keycloakUser user = new keycloakUser();
-        user.setEmail("7777@mail.ru");
-        user.setEnabled(true);
-        user.setFirstName("test777");
-        user.setLastName("test777");
-        user.setUsername("test777");
+//        for (Object item : userList) {
+//            System.out.println("item = " + item);
+//
+//        }
+        for (int i = 14342; i < 18000; i++) {
+            keycloakUser user = new keycloakUser();
+            user.setEmail("user_00" + i + "@mail.ru");
+            user.setEnabled(true);
+            user.setFirstName("user_00" + i);
+            user.setLastName("user_00" + i);
+            user.setUsername("user_00" + i);
 
-        credentialRepresentation credentials = new credentialRepresentation();
-        credentials.setType("password");
-        credentials.setValue("1234");
+            String s1 = "г. Краснодар, пр. Чекистов 37, кв " + i;
+            String addr = new String(s1.getBytes("UTF-8"), "windows-1251");
+            System.out.println("addr = " + addr);
+            HashMap<String, String> attr = new HashMap<>();
+            attr.put("elk_id", "100" + i);
+            attr.put("elk_b2b_id", "105" + i);
+            attr.put("address", addr);
 
-        List<credentialRepresentation> tempList = new ArrayList<>();
-        tempList.add(credentials);
+            user.setAttributes(attr);
 
-        user.setCredentials(tempList);
+            credentialRepresentation credentials = new credentialRepresentation();
+            credentials.setType("password");
+            credentials.setValue("123");
 
-        // Отправляем другой запрос
-        url = "http://192.168.1.150:8080/auth/admin/realms/master/users";
-        Map<String, String> mapHeader = new HashMap<>();
-        mapHeader.put("Content-Type", "application/json");
-        mapHeader.put("Authorization", "Bearer " + access_token);
-        doPost(url, user, mapHeader);*/
+            List<credentialRepresentation> tempList = new ArrayList<>();
+            tempList.add(credentials);
+
+            user.setCredentials(tempList);
+
+            System.out.println("user = " + user);
+            String resObj = keycloak.addUser(user);
+            if ((resObj!=null)&&(resObj.equals("Bearer"))){
+                keycloak.Init();
+                keycloak.addUser(user);
+            }
+        }
+
     }
 
 }
