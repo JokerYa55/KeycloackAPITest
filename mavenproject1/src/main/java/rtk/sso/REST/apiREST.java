@@ -93,7 +93,7 @@ public class apiREST {
             mapHeader.put("Authorization", "Bearer " + this.token);
             String arrStr = httpUtil.doGet(url, mapHeader);
             JSONParser parser = new JSONParser();
-            Object obj = parser.parse(arrStr.toString());
+            Object obj = parser.parse(arrStr);
             res = (JSONArray) obj;
         } catch (Exception e) {
             log.error(e.getMessage());
