@@ -40,13 +40,14 @@ public class utlhttp {
         try {
             HttpClient httpClient = HttpClientBuilder.create().build();
             Gson gson = new Gson();
-            JSONParser parser = new JSONParser();
-            HttpPost post = new HttpPost(url);
             
+            HttpPost post = new HttpPost(url);
+            System.out.println("");
+            System.out.println("params = " + params.toString());
             System.out.println("json param = " + gson.toJson(params));
             
             StringEntity postingString = new StringEntity(gson.toJson(params), "application/json", "UTF-8");
-            System.out.println("params = " + params.toString());
+            
             System.out.println("postingString = " + postingString.toString());
             post.setEntity(postingString);
             
@@ -73,6 +74,7 @@ public class utlhttp {
                 obj.put("error", "Bearer");                
                 res = obj;
             } else {
+                JSONParser parser = new JSONParser();
                 Object obj = parser.parse(json.toString());
                 JSONObject jsonObj = (JSONObject) obj;
                 res = jsonObj;
