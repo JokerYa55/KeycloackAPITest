@@ -48,12 +48,12 @@ public class NewMain {
             user.setUsername("user_00" + i);
             
             String s1 =  "пр. Чекистов 37, кв. " + i;
-            String addr = new String(s1.getBytes("ISO-8859-1"), "UTF-8");
-            System.out.println("addr = " + addr);
+            //String addr = new String(s1.getBytes("ISO-8859-1"), "UTF-8");
+            System.out.println("addr = " + s1);
             HashMap<String, String> attr = new HashMap<>();
             attr.put("elk_id", "100" + i);
             attr.put("elk_b2b_id", "105" + i);
-            attr.put("address", addr);
+            attr.put("address", s1);
 
             user.setAttributes(attr);
 
