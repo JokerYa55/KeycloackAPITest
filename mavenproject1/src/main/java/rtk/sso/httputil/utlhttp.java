@@ -37,6 +37,14 @@ public class utlhttp {
 
     private static final Logger log = Logger.getLogger(utlhttp.class);
 
+    /**
+     * 
+     * @param url
+     * @param params
+     * @param headerList
+     * @return 
+     */
+    
     public JSONObject doPost(String url, Object params, Map<String, String> headerList) {
         System.out.println("doPost => " + params.toString());
         JSONObject res = new JSONObject();
