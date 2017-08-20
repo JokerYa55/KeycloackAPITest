@@ -7,13 +7,16 @@ package rtk.sso.REST;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import rtk.sso.admintest.keycloakUser;
 import rtk.sso.httputil.utlhttp;
 
 /**
@@ -55,7 +58,7 @@ public class apiREST {
             nameValuePairs.add(new BasicNameValuePair("grant_type", "password"));
             JSONObject accessJson = httpUtil.doPost(url, nameValuePairs, null);
             res = (String) accessJson.get("access_token");
-            log.info("access_token = " + res);
+            //log.info("access_token = " + res);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -72,7 +75,15 @@ public class apiREST {
             mapHeader.put("Content-Type", "application/json");
             mapHeader.put("Authorization", "Bearer " + this.token);
             JSONObject res1 = httpUtil.doPost(url, user, mapHeader);
-            System.out.println("res1 = " + res1.toJSONString());
+            //System.out.println("res1 = " + res1.toJSONString());
+
+            List<NameValuePair> params = new LinkedList<>();
+            params.add(new BasicNameValuePair("search", ((keycloakUser) user).getUsername()));
+            JSONArray userJSON = getUsers(params);
+            if (userJSON.size() == 1) {
+                JSONObject userDB = (JSONObject) userJSON.get(0);
+            }
+            System.out.println("userJSON = " + userJSON.toJSONString());
             res = (String) res1.get("error");
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -80,29 +91,28 @@ public class apiREST {
         return res;
     }
 
-    public JSONArray getUsers(Object params) {
-        System.out.println("getUsers");
+    public JSONArray getUsers(List params) {
+        System.out.println("getUsers =? " + params.toString());
         JSONArray res = null;
         try {
-
-            if (params != null) {
-            }
 
             utlhttp httpUtil = new utlhttp();
             // /admin/realms/{realm}/users
             String url = "http://" + host + "/auth/admin/realms/" + this.realm + "/users";
+            
             System.out.println("url = " + url);
             Map<String, String> mapHeader = new HashMap<>();
             mapHeader.put("Content-Type", "application/json");
+            mapHeader.put("charset", "utf-8");
             mapHeader.put("Authorization", "Bearer " + this.token);
-            String arrStr = httpUtil.doGet(url, mapHeader);
+            String arrStr = httpUtil.doGet(url, params, mapHeader);
             JSONParser parser = new JSONParser();
             Object obj = parser.parse(arrStr);
             res = (JSONArray) obj;
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-        System.out.println("res= " + res.toJSONString());
+        //System.out.println("getUsers res= " + res.toJSONString());
         return res;
     }
 

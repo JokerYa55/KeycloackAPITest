@@ -9,6 +9,8 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 import org.apache.http.Header;
@@ -40,21 +42,21 @@ public class utlhttp {
         try {
             HttpClient httpClient = HttpClientBuilder.create().build();
             Gson gson = new Gson();
-            
+
             HttpPost post = new HttpPost(url);
-            System.out.println("");
-            System.out.println("params = " + params.toString());
-            System.out.println("json param = " + gson.toJson(params));
-            
+            //System.out.println("");
+            //System.out.println("params = " + params.toString());
+            //System.out.println("json param = " + gson.toJson(params));
+
             StringEntity postingString = new StringEntity(gson.toJson(params), "application/json", "UTF-8");
-            
-            System.out.println("postingString = " + postingString.toString());
+
+            //System.out.println("postingString = " + postingString.toString());
             post.setEntity(postingString);
-            
+
             if (headerList != null) {
                 headerList.entrySet().stream().forEach((t) -> {
                     Header header = new BasicHeader(t.getKey(), t.getValue());
-                    System.out.println("header => " + header);
+                    //System.out.println("header => " + header);
                     post.setHeader(header);
                 });
             }
@@ -67,11 +69,11 @@ public class utlhttp {
                 json.append(line);
             }
 
-            System.out.println("json = " + json.toString());
+            //System.out.println("json = " + json.toString());
 
             if ((json != null) && (json.toString().equals("Bearer"))) {
                 JSONObject obj = new JSONObject();
-                obj.put("error", "Bearer");                
+                obj.put("error", "Bearer");
                 res = obj;
             } else {
                 JSONParser parser = new JSONParser();
@@ -87,7 +89,11 @@ public class utlhttp {
     }
 
     /**
-     * Отправка POST запроса
+     * 
+     * @param url
+     * @param params
+     * @param headerList
+     * @return 
      */
     public JSONObject doPost(String url, List params, Map<String, String> headerList) {
         JSONObject res = new JSONObject();
@@ -102,7 +108,7 @@ public class utlhttp {
             }
 
             if (params != null) {
-                System.out.println((new UrlEncodedFormEntity(params)).toString());
+                //System.out.println((new UrlEncodedFormEntity(params)).toString());
                 post.setEntity(new UrlEncodedFormEntity(params));
             }
 
@@ -111,7 +117,7 @@ public class utlhttp {
             String line = "";
             StringBuilder json = new StringBuilder();
             while ((line = rd.readLine()) != null) {
-                System.out.println(line);
+                //System.out.println(line);
                 json.append(line);
             }
 
@@ -119,7 +125,7 @@ public class utlhttp {
             Object obj = parser.parse(json.toString());
             JSONObject jsonObj = (JSONObject) obj;
             res = jsonObj;
-            System.out.println("access_token : " + res.get("access_token"));
+            //System.out.println("access_token : " + res.get("access_token"));
 
         } catch (IOException | IllegalStateException | ParseException e) {
             System.out.println(e.getMessage());
@@ -134,9 +140,22 @@ public class utlhttp {
      * @return
      * @throws ParseException
      */
-    public String doGet(String url, Map<String, String> headerList) throws ParseException {
+    public String doGet(String url, List params, Map<String, String> headerList) throws ParseException, UnsupportedEncodingException {
         System.out.println("doGet");
         String res = null;
+
+        if (params != null) {
+            StringBuilder pStr = new StringBuilder();
+            for (Object param : params) {
+                pStr.append(param.toString());
+                //System.out.println("param = " + URLEncoder.encode(param.toString()));
+            }
+            if (pStr.toString().length() > 0) {
+                url = url + "?" + pStr.toString();
+                //System.out.println("url = " + url);
+            }
+        }
+
         HttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(url);
         HttpResponse response;
@@ -150,14 +169,14 @@ public class utlhttp {
 
         try {
             response = client.execute(request);
-            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
             String line = "";
             StringBuilder json = new StringBuilder();
             while ((line = rd.readLine()) != null) {
                 json.append(line);
             }
 
-            System.out.println("json = " + json.toString());
+            //System.out.println("json = " + json.toString());
             res = json.toString();
             /*org.json.simple.parser.JSONParser parser = new JSONParser();
             Object obj = parser.parse(json.toString());

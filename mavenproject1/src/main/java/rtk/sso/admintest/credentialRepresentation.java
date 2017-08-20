@@ -5,9 +5,6 @@
  */
 package rtk.sso.admintest;
 
-import java.util.HashMap;
-import javax.ws.rs.core.MultivaluedHashMap;
-
 /**
  *
  * @author vasil
