@@ -19,6 +19,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -70,7 +71,6 @@ public class utlhttp {
             }
 
             //System.out.println("json = " + json.toString());
-
             if ((json != null) && (json.toString().equals("Bearer"))) {
                 JSONObject obj = new JSONObject();
                 obj.put("error", "Bearer");
@@ -89,11 +89,11 @@ public class utlhttp {
     }
 
     /**
-     * 
+     *
      * @param url
      * @param params
      * @param headerList
-     * @return 
+     * @return
      */
     public JSONObject doPost(String url, List params, Map<String, String> headerList) {
         JSONObject res = new JSONObject();
@@ -192,5 +192,57 @@ public class utlhttp {
             System.out.println(ex.getMessage());
         }
         return res;
+    }
+
+    public int doPut(/*String data,*/String url, Object params, Map<String, String> headerList) {
+        int responseCode = -1;
+        HttpClient httpClient = new DefaultHttpClient();
+        try {
+            HttpPut request = new HttpPut(url);
+            Gson gson = new Gson();
+            StringEntity paramStr = new StringEntity(gson.toJson(params), "UTF-8");
+//            params.setContentType("application/json");
+//            request.addHeader("content-type", "application/json");
+//            request.addHeader("Accept", "*/*");
+//            request.addHeader("Accept-Encoding", "gzip,deflate,sdch");
+//            request.addHeader("Accept-Language", "en-US,en;q=0.8");
+
+            if (headerList != null) {
+                headerList.entrySet().stream().forEach((t) -> {
+                    Header header = new BasicHeader(t.getKey(), t.getValue());
+                    request.setHeader(header);
+                });
+            }
+
+            request.setEntity(paramStr);
+            HttpResponse response = httpClient.execute(request);
+            responseCode = response.getStatusLine().getStatusCode();
+            if (response.getStatusLine().getStatusCode() == 200 || response.getStatusLine().getStatusCode() == 204) {
+
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader((response.getEntity().getContent()),"UTF-8"));
+
+                String output;
+                // System.out.println("Output from Server ...." + response.getStatusLine().getStatusCode() + "\n");
+                while ((output = br.readLine()) != null) {
+                    // System.out.println(output);
+                }
+            } else {
+                System.out.println(response.getStatusLine().getStatusCode());
+
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + response.getStatusLine().getStatusCode());
+            }
+
+        } catch (Exception ex) {
+            System.out.println("ex Code sendPut: " + ex);
+            System.out.println("url:" + url);
+            System.out.println("data:" + params);
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+
+        return responseCode;
+
     }
 }

@@ -83,12 +83,12 @@ public class apiREST {
             JSONArray userJSON = getUsers(params);
             JSONObject userDB = null;
             if (userJSON.size() == 1) {
-                userDB = (JSONObject) userJSON.get(0);                
+                userDB = (JSONObject) userJSON.get(0);
             }
-            
+
             // Change user password
             System.out.println("userID = " + userDB.get("id"));
-                        
+
             System.out.println("userJSON = " + userJSON.toJSONString());
             res = (String) res1.get("error");
         } catch (Exception e) {
@@ -97,20 +97,33 @@ public class apiREST {
         return res;
     }
 
-    
-    public void changeUserPassword(String password){
+    public void changeUserPassword(String userID, String password) {
         try {
             System.out.println("changeUserPassword => " + password);
-            
+            String url = "http://" + host + "/auth/admin/realms/master/users/" + userID + "/reset-password";
+            utlhttp httpUtil = new utlhttp();
+
+            Map<String, String> mapHeader = new HashMap<>();
+            mapHeader.put("Content-Type", "application/json");
+            mapHeader.put("charset", "utf-8");
+            mapHeader.put("Authorization", "Bearer " + this.token);
+            mapHeader.put("Accept-Encoding", "gzip,deflate,sdch");
+
+            Map<String, String> param = new HashMap<>();
+            param.put("type", "password");
+            param.put("temporary", "false");
+            param.put("value", "123");
+            httpUtil.doPut(url, param, mapHeader);
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
-    
+
     /**
-     * 
+     *
      * @param params
-     * @return 
+     * @return
      */
     public JSONArray getUsers(List params) {
         System.out.println("getUsers =? " + params.toString());
@@ -120,7 +133,7 @@ public class apiREST {
             utlhttp httpUtil = new utlhttp();
             // /admin/realms/{realm}/users
             String url = "http://" + host + "/auth/admin/realms/" + this.realm + "/users";
-            
+
             System.out.println("url = " + url);
             Map<String, String> mapHeader = new HashMap<>();
             mapHeader.put("Content-Type", "application/json");
