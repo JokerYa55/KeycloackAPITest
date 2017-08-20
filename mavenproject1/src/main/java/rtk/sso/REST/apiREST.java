@@ -80,10 +80,14 @@ public class apiREST {
         return res;
     }
 
-    public JSONArray getUsers() {
+    public JSONArray getUsers(Object params) {
         System.out.println("getUsers");
         JSONArray res = null;
         try {
+
+            if (params != null) {
+            }
+
             utlhttp httpUtil = new utlhttp();
             // /admin/realms/{realm}/users
             String url = "http://" + host + "/auth/admin/realms/" + this.realm + "/users";
@@ -101,4 +105,5 @@ public class apiREST {
         System.out.println("res= " + res.toJSONString());
         return res;
     }
+
 }

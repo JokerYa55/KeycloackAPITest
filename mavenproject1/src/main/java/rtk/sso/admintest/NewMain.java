@@ -33,13 +33,13 @@ public class NewMain {
 
         apiREST keycloak = new apiREST("vasil", "123", "127.0.0.1:8080", "videomanager");
         keycloak.Init();
-        JSONArray userList = keycloak.getUsers();
-
+        
+//        JSONArray userList = keycloak.getUsers();
 //        for (Object item : userList) {
 //            System.out.println("item = " + item);
 //
 //        }
-        for (int i = 1; i < 5; i++) {
+        for (int i = 6; i < 10; i++) {
             keycloakUser user = new keycloakUser();
             user.setEmail("user_00" + i + "@mail.ru");
             user.setEnabled(true);
