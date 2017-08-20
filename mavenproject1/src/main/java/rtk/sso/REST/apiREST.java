@@ -5,6 +5,7 @@
  */
 package rtk.sso.REST;
 
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -80,9 +81,14 @@ public class apiREST {
             List<NameValuePair> params = new LinkedList<>();
             params.add(new BasicNameValuePair("search", ((keycloakUser) user).getUsername()));
             JSONArray userJSON = getUsers(params);
+            JSONObject userDB = null;
             if (userJSON.size() == 1) {
-                JSONObject userDB = (JSONObject) userJSON.get(0);
+                userDB = (JSONObject) userJSON.get(0);                
             }
+            
+            // Change user password
+            System.out.println("userID = " + userDB.get("id"));
+                        
             System.out.println("userJSON = " + userJSON.toJSONString());
             res = (String) res1.get("error");
         } catch (Exception e) {
@@ -91,6 +97,21 @@ public class apiREST {
         return res;
     }
 
+    
+    public void changeUserPassword(String password){
+        try {
+            System.out.println("changeUserPassword => " + password);
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    /**
+     * 
+     * @param params
+     * @return 
+     */
     public JSONArray getUsers(List params) {
         System.out.println("getUsers =? " + params.toString());
         JSONArray res = null;
@@ -106,6 +127,7 @@ public class apiREST {
             mapHeader.put("charset", "utf-8");
             mapHeader.put("Authorization", "Bearer " + this.token);
             String arrStr = httpUtil.doGet(url, params, mapHeader);
+
             JSONParser parser = new JSONParser();
             Object obj = parser.parse(arrStr);
             res = (JSONArray) obj;
