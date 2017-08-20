@@ -100,7 +100,7 @@ public class apiREST {
     public void changeUserPassword(String userID, String password) {
         try {
             System.out.println("changeUserPassword => " + password);
-            String url = "http://" + host + "/auth/admin/realms/master/users/" + userID + "/reset-password";
+            String url = "http://" + host + "/auth/admin/realms/" + this.realm + "/users/" + userID + "/reset-password";
             utlhttp httpUtil = new utlhttp();
 
             Map<String, String> mapHeader = new HashMap<>();
@@ -112,7 +112,7 @@ public class apiREST {
             Map<String, String> param = new HashMap<>();
             param.put("type", "password");
             param.put("temporary", "false");
-            param.put("value", "123");
+            param.put("value", password);
             httpUtil.doPut(url, param, mapHeader);
 
         } catch (Exception e) {

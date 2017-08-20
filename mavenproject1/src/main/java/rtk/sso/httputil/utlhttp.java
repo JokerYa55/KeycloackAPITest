@@ -195,17 +195,13 @@ public class utlhttp {
     }
 
     public int doPut(/*String data,*/String url, Object params, Map<String, String> headerList) {
+        System.out.println("doPut => " + url);
         int responseCode = -1;
         HttpClient httpClient = new DefaultHttpClient();
         try {
             HttpPut request = new HttpPut(url);
             Gson gson = new Gson();
             StringEntity paramStr = new StringEntity(gson.toJson(params), "UTF-8");
-//            params.setContentType("application/json");
-//            request.addHeader("content-type", "application/json");
-//            request.addHeader("Accept", "*/*");
-//            request.addHeader("Accept-Encoding", "gzip,deflate,sdch");
-//            request.addHeader("Accept-Language", "en-US,en;q=0.8");
 
             if (headerList != null) {
                 headerList.entrySet().stream().forEach((t) -> {
@@ -218,18 +214,14 @@ public class utlhttp {
             HttpResponse response = httpClient.execute(request);
             responseCode = response.getStatusLine().getStatusCode();
             if (response.getStatusLine().getStatusCode() == 200 || response.getStatusLine().getStatusCode() == 204) {
-
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader((response.getEntity().getContent()),"UTF-8"));
-
+                BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent()),"UTF-8"));
                 String output;
                 // System.out.println("Output from Server ...." + response.getStatusLine().getStatusCode() + "\n");
                 while ((output = br.readLine()) != null) {
-                    // System.out.println(output);
+                    System.out.println(output);
                 }
             } else {
                 System.out.println(response.getStatusLine().getStatusCode());
-
                 throw new RuntimeException("Failed : HTTP error code : "
                         + response.getStatusLine().getStatusCode());
             }
