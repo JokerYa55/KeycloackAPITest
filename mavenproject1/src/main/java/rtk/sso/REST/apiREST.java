@@ -88,7 +88,7 @@ public class apiREST {
 
             // Change user password
             System.out.println("userID = " + userDB.get("id"));
-
+            changeUserPassword((String) userDB.get("id"), "123");
             System.out.println("userJSON = " + userJSON.toJSONString());
             res = (String) res1.get("error");
         } catch (Exception e) {

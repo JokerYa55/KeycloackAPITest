@@ -194,15 +194,28 @@ public class utlhttp {
         return res;
     }
 
+    /**
+     * 
+     * @param url
+     * @param params
+     * @param headerList
+     * @return 
+     */
     public int doPut(/*String data,*/String url, Object params, Map<String, String> headerList) {
-        System.out.println("doPut => " + url);
+        System.out.println("doPut => " + url + " param = " + params);
         int responseCode = -1;
         HttpClient httpClient = new DefaultHttpClient();
         try {
             HttpPut request = new HttpPut(url);
-            Gson gson = new Gson();
-            StringEntity paramStr = new StringEntity(gson.toJson(params), "UTF-8");
 
+            // Set PARAMS
+            if (params != null) {
+                Gson gson = new Gson();
+                StringEntity paramStr = new StringEntity(gson.toJson(params), "UTF-8");
+                request.setEntity(paramStr);
+            }
+
+            // Set HEADERS
             if (headerList != null) {
                 headerList.entrySet().stream().forEach((t) -> {
                     Header header = new BasicHeader(t.getKey(), t.getValue());
@@ -210,15 +223,19 @@ public class utlhttp {
                 });
             }
 
-            request.setEntity(paramStr);
             HttpResponse response = httpClient.execute(request);
             responseCode = response.getStatusLine().getStatusCode();
+            System.out.println("responseCode = " + responseCode);
             if (response.getStatusLine().getStatusCode() == 200 || response.getStatusLine().getStatusCode() == 204) {
-                BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent()),"UTF-8"));
-                String output;
-                // System.out.println("Output from Server ...." + response.getStatusLine().getStatusCode() + "\n");
-                while ((output = br.readLine()) != null) {
-                    System.out.println(output);
+                if (responseCode != 204) {
+                    BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent()), "UTF-8"));
+                    System.out.println("br = " + br);
+                    String output;
+                    // System.out.println("Output from Server ...." + response.getStatusLine().getStatusCode() + "\n");
+                    while ((output = br.readLine()) != null) {
+                        System.out.println(output);
+                    }
+                    System.out.println("output = " + output);
                 }
             } else {
                 System.out.println(response.getStatusLine().getStatusCode());
