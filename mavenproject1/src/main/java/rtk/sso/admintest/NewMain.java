@@ -62,14 +62,14 @@ public class NewMain {
 
             user.setAttributes(attr);
 
-            credentialRepresentation credentials = new credentialRepresentation();
+            /*credentialRepresentation credentials = new credentialRepresentation();
             credentials.setType("password");
             credentials.setValue("123");
 
             List<credentialRepresentation> tempList = new ArrayList<>();
             tempList.add(credentials);
 
-            user.setCredentials(tempList);
+            user.setCredentials(tempList);*/
 
             System.out.println("user = " + user);
             String resObj = keycloak.addUser(user);
