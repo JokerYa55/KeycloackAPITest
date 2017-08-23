@@ -43,7 +43,7 @@ public class NewMain {
 //            System.out.println("item = " + item);
 //
 //        }
-        for (int i = 0; i < 5; i++) {
+        for (int i = 6; i < 10; i++) {
             keycloakUser user = new keycloakUser();
             user.setEmail("user_00" + i + "@mail.ru");
             user.setEnabled(true);
