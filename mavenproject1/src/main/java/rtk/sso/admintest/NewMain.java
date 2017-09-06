@@ -41,13 +41,13 @@ public class NewMain {
 //            System.out.println("item = " + item);
 //
 //        }
-        for (int i = 1; i <= 1; i++) {
+        for (int i = 1; i <= 10; i++) {
             keycloakUser user = new keycloakUser();
             user.setEmail("user_00" + i + "@mail.ru");
             user.setEnabled(true);
             user.setFirstName("user_00" + i);
             user.setLastName("user_00999" + i);
-            //user.setUsername("user_00" + i);
+            user.setUsername("user_00" + i);
             
 
             String s1 = "пр. Чекистов 37, кв. " + i;
@@ -77,13 +77,13 @@ public class NewMain {
 
             user.setCredentials(tempList);*/
 
-            System.out.println("user = " + user);
-            //String resObj = keycloak.addUser(user);
-            keycloak.updateUserFederatedIdentity("f:299ffda0-0501-4987-8285-5900221bce54:122", fed);
-            /*if ((resObj != null) && (resObj.equals("Bearer"))) {
+            System.out.println("user = " + user);            
+            //keycloak.updateUserFederatedIdentity("f:299ffda0-0501-4987-8285-5900221bce54:122", fed);
+            String resObj = keycloak.addUser(user);
+            if ((resObj != null) && (resObj.equals("Bearer"))) {
                 keycloak.Init();
                 keycloak.addUser(user);
-            }*/
+            }
         }
 
     }
