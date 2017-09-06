@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package rtk.sso.admintest;
+package rtk.sso.keycloak.model;
 
+import rtk.sso.keycloak.model.credentialRepresentation;
 import java.util.HashMap;
 import java.util.List;
 

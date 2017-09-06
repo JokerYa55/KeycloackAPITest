@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import rtk.sso.admintest.keycloakUser;
+import rtk.sso.keycloak.model.keycloakUser;
 import rtk.sso.httputil.utlhttp;
 
 /**

@@ -5,6 +5,7 @@
  */
 package rtk.sso.admintest;
 
+import rtk.sso.keycloak.model.keycloakUser;
 import java.io.IOException;
 import java.util.HashMap;
 import org.apache.log4j.Logger;
