@@ -55,7 +55,7 @@ public class utlhttp {
             HttpPost post = new HttpPost(url);
             //System.out.println("");
             //System.out.println("params = " + params.toString());
-            //System.out.println("json param = " + gson.toJson(params));
+            System.out.println("json param = " + gson.toJson(params));
 
             StringEntity postingString = new StringEntity(gson.toJson(params), "application/json", "UTF-8");
 
@@ -219,6 +219,7 @@ public class utlhttp {
             // Set PARAMS
             if (params != null) {
                 Gson gson = new Gson();
+                System.out.println("json param = " + gson.toJson(params));
                 StringEntity paramStr = new StringEntity(gson.toJson(params), "UTF-8");
                 request.setEntity(paramStr);
             }
@@ -239,7 +240,7 @@ public class utlhttp {
                     BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent()), "UTF-8"));
                     System.out.println("br = " + br);
                     String output;
-                    // System.out.println("Output from Server ...." + response.getStatusLine().getStatusCode() + "\n");
+                     System.out.println("Output from Server ...." + response.getStatusLine().getStatusCode() + "\n");
                     while ((output = br.readLine()) != null) {
                         System.out.println(output);
                     }

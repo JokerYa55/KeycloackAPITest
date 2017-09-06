@@ -7,10 +7,13 @@ package rtk.sso.admintest;
 
 import rtk.sso.keycloak.model.keycloakUser;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.json.simple.parser.ParseException;
 import rtk.sso.REST.apiREST;
+import rtk.sso.keycloak.model.federatedIdentityRepresentation;
 
 /**
  *
@@ -38,13 +41,13 @@ public class NewMain {
 //            System.out.println("item = " + item);
 //
 //        }
-        for (int i = 1; i < 11; i++) {
+        for (int i = 1; i <= 1; i++) {
             keycloakUser user = new keycloakUser();
             user.setEmail("user_00" + i + "@mail.ru");
             user.setEnabled(true);
             user.setFirstName("user_00" + i);
-            user.setLastName("user_00" + i);
-            user.setUsername("user_00" + i);
+            user.setLastName("user_00999" + i);
+            //user.setUsername("user_00" + i);
             
 
             String s1 = "пр. Чекистов 37, кв. " + i;
@@ -57,7 +60,14 @@ public class NewMain {
             attr.put("address", s1);
 
             user.setAttributes(attr);
-
+            
+            // github	24369344	JokerYa55
+            federatedIdentityRepresentation fed = new federatedIdentityRepresentation();
+            fed.setIdentityProvider("github");
+            fed.setUserId("24369344");
+            fed.setUserName("JokerYa55");
+            
+            
             /*credentialRepresentation credentials = new credentialRepresentation();
             credentials.setType("password");
             credentials.setValue("123");
@@ -68,11 +78,12 @@ public class NewMain {
             user.setCredentials(tempList);*/
 
             System.out.println("user = " + user);
-            String resObj = keycloak.addUser(user);
-            if ((resObj != null) && (resObj.equals("Bearer"))) {
+            //String resObj = keycloak.addUser(user);
+            keycloak.updateUserFederatedIdentity("f:299ffda0-0501-4987-8285-5900221bce54:122", fed);
+            /*if ((resObj != null) && (resObj.equals("Bearer"))) {
                 keycloak.Init();
                 keycloak.addUser(user);
-            }
+            }*/
         }
 
     }

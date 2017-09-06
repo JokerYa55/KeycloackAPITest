@@ -19,6 +19,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import rtk.sso.keycloak.model.keycloakUser;
 import rtk.sso.httputil.utlhttp;
+import rtk.sso.keycloak.model.federatedIdentityRepresentation;
 
 /**
  *
@@ -28,10 +29,10 @@ public class apiREST {
 
     private static final Logger log = Logger.getLogger(apiREST.class);
     private String token;
-    private String username;
-    private String password;
-    private String host;
-    private String realm;
+    private final String username;
+    private final String password;
+    private final String host;
+    private final String realm;
 
     public apiREST(String username, String password, String host, String realm) {
         this.username = username;
@@ -66,6 +67,11 @@ public class apiREST {
         return res;
     }
 
+    /**
+     *
+     * @param user
+     * @return
+     */
     public String addUser(Object user) {
         String res = null;
         try {
@@ -88,7 +94,7 @@ public class apiREST {
 
             // Change user password
             System.out.println("userID = " + userDB.get("id"));
-            changeUserPassword((String) userDB.get("id"), "123"+((keycloakUser) user).getFirstName());
+            changeUserPassword((String) userDB.get("id"), "123" + ((keycloakUser) user).getFirstName());
             System.out.println("userJSON = " + userJSON.toJSONString());
             res = (String) res1.get("error");
         } catch (Exception e) {
@@ -97,6 +103,11 @@ public class apiREST {
         return res;
     }
 
+    /**
+     *
+     * @param userID
+     * @param password
+     */
     public void changeUserPassword(String userID, String password) {
         try {
             System.out.println("changeUserPassword => " + password);
@@ -151,4 +162,18 @@ public class apiREST {
         return res;
     }
 
+    public String updateUserFederatedIdentity(String userID, federatedIdentityRepresentation fed) {
+        try {
+            //  federated-identity/github}
+            utlhttp httpUtil = new utlhttp();
+            String url = "http://" + host + "/auth/admin/realms/" + this.realm + "/users/" + userID + "/federated-identity/github";
+            Map<String, String> mapHeader = new HashMap<>();
+            mapHeader.put("Content-Type", "application/json");
+            mapHeader.put("Authorization", "Bearer " + this.token);
+            JSONObject res1 = httpUtil.doPost(url, fed, mapHeader);
+            return res1.toJSONString();
+        } catch (Exception e) {
+        }
+        return "";
+    }
 }
