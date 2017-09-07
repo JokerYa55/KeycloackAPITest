@@ -41,7 +41,7 @@ public class NewMain {
 //            System.out.println("item = " + item);
 //
 //        }
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 31; i <= 50; i++) {
             keycloakUser user = new keycloakUser();
             user.setEmail("user_00" + i + "@mail.ru");
             user.setEnabled(true);
